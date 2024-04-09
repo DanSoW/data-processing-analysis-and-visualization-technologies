@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-# Enum for defined all accessible file extension
+# ENUM для представления констант всех доступных расширений файлов
 class FileExtensions(Enum):
     TXT = "txt"
     XML = "xml"
@@ -9,6 +9,7 @@ class FileExtensions(Enum):
     XLSX = "xlsx"
     PDF = "pdf"
 
+    # Метод для получения значений всех возможных расширений файлов
     @classmethod
     def as_list(cls):
         return [cls.TXT.value, cls.PDF.value, cls.XLSX.value, cls.DOCX.value, cls.XML.value]
