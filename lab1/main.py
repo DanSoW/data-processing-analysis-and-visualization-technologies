@@ -32,14 +32,19 @@ results = {
 
 # Проход по директории source_data для определения путей к файлам разных типов
 try:
+    # Движение по директории source_data
     for subdir, dirs, files in os.walk(source_data_path):
+        # Перебор файлов
         for file in files:
+            # Разбиение имени файла на отдельные части (расширение и всё остальное)
             elements = file.split('.')
             if len(elements) < 2:
                 raise Exception("Error! The file does not contain the format")
 
+            # Определение расширения файла
             fileExt = elements[len(elements) - 1]
 
+            # Проверка расширения файла
             if fileExt in FileExtensions.as_list():
                 filepaths[fileExt] = os.path.join(subdir, file)
 
@@ -165,17 +170,24 @@ data_table = [
      ]
 ]
 
+
+# Проход по всем определённым страницам документа, в которых есть таблица
 for index in range(len(pages)):
+    # Получение информации об одной таблице
     page = pages[index]
+
+    # Удаление из столбцов некорректных данных
     page.columns = page.columns.str.replace('-.1', '-')
+
+    # Создание копии-объекта без столбцов с именем Unnamed (нет имени)
     page_without_unnamed = page.loc[:, ~page.columns.str.contains('^Unnamed')]
 
+    # Если index == 0, то удаляем столбец со значением NaN (неопределённым)
     if index == 0:
         page = page.dropna(axis=1)
     else:
+        # Иначе заполняем все значения NaN пустой строкой
         page = page.fillna('')
-
-    print(page)
 
     # Добавление строк, характеризующие подтаблицы в рамках одной страницы
     data_table.append(list(page_without_unnamed.columns))
